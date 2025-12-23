@@ -1,0 +1,81 @@
+{
+  "info": {
+    "name": "SpringBoot WIF Local Tests",
+    "_postman_id": "12345678-abcd-efgh-ijkl-987654321000",
+    "description": "Collection to test Entra→GCP token exchange and IAM calls locally",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Token Exchange",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{ENTRA_ID_TOKEN}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/token/exchange",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["token", "exchange"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Service Accounts",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{GOOGLE_ACCESS_TOKEN}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/iam/service-accounts?projectId={{PROJECT_ID}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["iam", "service-accounts"],
+          "query": [
+            {
+              "key": "projectId",
+              "value": "{{PROJECT_ID}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "ENTRA_ID_TOKEN",
+      "value": "replace_with_your_entra_id_token"
+    },
+    {
+      "key": "GOOGLE_ACCESS_TOKEN",
+      "value": "replace_with_google_access_token"
+    },
+    {
+      "key": "PROJECT_ID",
+      "value": "blogcms-465619"
+    }
+  ]
+}

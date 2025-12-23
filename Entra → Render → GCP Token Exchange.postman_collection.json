@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "cc02a222-824c-4a4d-b1c3-58a474eeb574",
+		"name": "Entra → Render → GCP Token Exchange",
+		"description": "Collection to get Entra token, exchange via Render, and call GCP API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24052468"
+	},
+	"item": [
+		{
+			"name": "01 Exchange Code for ID Token Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "{{code}}",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://render-api-js.onrender.com/auth",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{tenant_id}}/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{tenant_id}}",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Exchange Token via Render App",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{entra_id_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://render-api-js.onrender.com/token/exchange",
+					"protocol": "https",
+					"host": [
+						"render-api-js",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"token",
+						"exchange"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Service Accounts Copy",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{gcp_access_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://iam.googleapis.com/v1/projects/blogcms-465619/serviceAccounts",
+					"protocol": "https",
+					"host": [
+						"iam",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"v1",
+						"projects",
+						"blogcms-465619",
+						"serviceAccounts"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "entra_token",
+			"value": ""
+		},
+		{
+			"key": "gcp_token",
+			"value": ""
+		}
+	]
+}
